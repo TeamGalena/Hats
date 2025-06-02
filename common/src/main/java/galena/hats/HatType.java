@@ -27,8 +27,11 @@ public enum HatType implements StringRepresentable {
     ;
 
     public static Optional<HatType> of(LivingEntity entity) {
-        if (entity instanceof Player && ConfigStorage.isEnabled()) {
-            return Optional.ofNullable(ConfigStorage.getHatType());
+        if (entity instanceof Player player) {
+            var config = ConfigStorage.getConfig(player);
+            return config
+                    .filter(ConfigStorage.Data::enabled)
+                    .map(ConfigStorage.Data::type);
         }
 
         return Optional.empty();

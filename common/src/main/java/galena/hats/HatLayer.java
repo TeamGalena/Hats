@@ -63,7 +63,7 @@ public class HatLayer<T extends LivingEntity, M extends EntityModel<T>> extends 
 
         poseStack.translate(0F, 0F, 0F);
 
-        var vertexConsumer = ItemRenderer.getArmorFoilBuffer(bufferSource, RenderType.armorCutoutNoCull(texture), false, false);
+        var vertexConsumer = ItemRenderer.getArmorFoilBuffer(bufferSource, RenderType.entityTranslucent(texture), false, false);
         model.prepareMobModel(entity, f, g, h);
 
         if (getParentModel() instanceof HumanoidModel<?> parent) {

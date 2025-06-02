@@ -1,0 +1,33 @@
+package galena.hats;
+
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.level.ServerPlayer;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Optional;
+import java.util.UUID;
+
+public record HatConfigMessage(@Nullable UUID player, ConfigStorage.Data data) {
+
+    public static void encode(HatConfigMessage message, FriendlyByteBuf buffer) {
+        message.data().encode(buffer);
+        buffer.writeBoolean(message.player() != null);
+        Optional.ofNullable(message.player()).ifPresent(buffer::writeUUID);
+    }
+
+    public static HatConfigMessage decode(FriendlyByteBuf buffer) {
+        var data = ConfigStorage.Data.decode(buffer);
+        var player = buffer.readBoolean() ? buffer.readUUID() : null;
+        return new HatConfigMessage(player, data);
+    }
+
+    public void distribute(ServerPlayer sender) {
+        var packet = new HatConfigMessage(sender.getUUID(), data());
+        sender.server.getPlayerList().getPlayers()
+                .stream()
+                .filter(it -> !it.getUUID().equals(player))
+                .forEach(it -> Services.NETWORK.broadcastConfig(packet, it));
+    }
+
+}

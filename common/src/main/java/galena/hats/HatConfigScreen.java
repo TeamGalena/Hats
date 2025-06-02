@@ -24,21 +24,23 @@ public class HatConfigScreen extends Screen {
     @Override
     protected void init() {
         var centerX = width / 2;
-        var startY = height / 4;
+        var startY = height / 6;
 
-        addRenderableWidget(CycleButton.onOffBuilder(ConfigStorage.isEnabled())
+        var config = ConfigStorage.getLocalConfig();
+
+        addRenderableWidget(CycleButton.onOffBuilder(config.enabled())
                 .create(centerX - 100, startY, 200, 20, Component.translatable(TRANSLATION_KEY + ".button.enable"), (button, value) -> ConfigStorage.setEnabled(value))
         );
 
         addRenderableWidget(CycleButton.<HatType>builder(type -> Component.translatable(MOD_ID + ".hat_type." + type.getSerializedName()))
                 .withValues(HatType.values())
-                .withInitialValue(ConfigStorage.getHatType())
+                .withInitialValue(config.type())
                 .create(centerX - 100, startY + 24, 200, 20, Component.translatable(TRANSLATION_KEY + ".button.type"), (button, value) -> ConfigStorage.setHatType(value))
         );
 
         addRenderableWidget(
                 Button.builder(CommonComponents.GUI_DONE, (button) -> onClose())
-                        .bounds(centerX - 100, startY + 58, 200, 20)
+                        .bounds(centerX - 100, startY + 78, 200, 20)
                         .build()
         );
     }
