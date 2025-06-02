@@ -27,11 +27,12 @@ public enum HatType implements StringRepresentable {
     ;
 
     public static Optional<HatType> of(LivingEntity entity) {
-        if (entity instanceof Player) {
-            return Optional.of(HatType.BINOME);
-        } else {
-            return Optional.empty();
+        if (entity instanceof Player && ConfigStorage.isEnabled()) {
+            return Optional.ofNullable(ConfigStorage.getHatType());
         }
+
+        return Optional.empty();
+
     }
 
     public static final Codec<HatType> CODEC = StringRepresentable.fromEnum(HatType::values);

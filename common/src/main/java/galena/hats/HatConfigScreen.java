@@ -1,0 +1,53 @@
+package galena.hats;
+
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.CycleButton;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.CommonComponents;
+import net.minecraft.network.chat.Component;
+import org.jetbrains.annotations.Nullable;
+
+import static galena.hats.Constants.MOD_ID;
+
+public class HatConfigScreen extends Screen {
+
+    public static final String TRANSLATION_KEY = MOD_ID + ".screen";
+
+    private final @Nullable Screen from;
+
+    public HatConfigScreen(@Nullable Screen from) {
+        super(Component.translatable(TRANSLATION_KEY + ".title"));
+        this.from = from;
+    }
+
+    @Override
+    protected void init() {
+        var centerX = width / 2;
+        var startY = height / 4;
+
+        addRenderableWidget(CycleButton.onOffBuilder(ConfigStorage.isEnabled())
+                .create(centerX - 100, startY, 200, 20, Component.translatable(TRANSLATION_KEY + ".button.enable"), (button, value) -> ConfigStorage.setEnabled(value))
+        );
+
+        addRenderableWidget(CycleButton.<HatType>builder(type -> Component.translatable(MOD_ID + ".hat_type." + type.getSerializedName()))
+                .withValues(HatType.values())
+                .withInitialValue(ConfigStorage.getHatType())
+                .create(centerX - 100, startY + 24, 200, 20, Component.translatable(TRANSLATION_KEY + ".button.type"), (button, value) -> ConfigStorage.setHatType(value))
+        );
+
+        addRenderableWidget(
+                Button.builder(CommonComponents.GUI_DONE, (button) -> onClose())
+                        .bounds(centerX - 100, startY + 58, 200, 20)
+                        .build()
+        );
+    }
+
+    @Override
+    public void onClose() {
+        if (from != null) {
+            Minecraft.getInstance().setScreen(from);
+        }
+    }
+
+}
