@@ -1,0 +1,43 @@
+name: Release
+on:
+  release:
+    types: [created]
+
+env:
+  CI: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: true
+
+      - uses: actions/setup-java@v4
+        with:
+          java-version: 21
+          distribution: temurin
+
+      - name: Update mod version
+        uses: christian-draeger/write-properties@1.0.1
+        with:
+          path: "gradle.properties"
+          property: "mod_version"
+          value: ${{ github.event.release.tag_name }}
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Build and upload
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: build curseforge modrinth
+        env:
+          CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
+          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+          CHANGELOG: ${{ github.event.release.body }}
