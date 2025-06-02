@@ -18,13 +18,12 @@ subprojects {
         exclude("**/*.bbmodel")
     }
 
-    enablePublishing  {
+    enablePublishing {
         repositories {
             mavenLocal()
 
-            // TODO use env
-            val nexusToken = System.getenv("NEXUS_TOKEN")
-            val nexusUser = System.getenv("NEXUS_USER")
+            val nexusToken = env["NEXUS_TOKEN"]
+            val nexusUser = env["NEXUS_USER"]
             if (nexusToken != null && nexusUser != null) {
                 maven {
                     url = uri("https://registry.somethingcatchy.net/repository/maven-releases/")

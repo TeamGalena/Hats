@@ -1,4 +1,4 @@
-package galena.nirvana.fabric;
+package galena.hats.fabric;
 
 import net.fabricmc.api.ModInitializer;
 

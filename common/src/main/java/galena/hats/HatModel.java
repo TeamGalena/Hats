@@ -7,11 +7,11 @@ import net.minecraft.world.entity.LivingEntity;
 
 import java.util.List;
 
-public class HatsModel<T extends LivingEntity> extends AgeableListModel<T> {
+public class HatModel<T extends LivingEntity> extends AgeableListModel<T> {
 
     private final ModelPart root;
 
-    public HatsModel(ModelPart root) {
+    public HatModel(ModelPart root) {
         this.root = root;
     }
 

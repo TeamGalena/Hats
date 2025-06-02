@@ -1,4 +1,4 @@
-package galena.nirvana.fabric.services;
+package galena.hats.fabric.services;
 
 import galena.hats.services.IPlatformHelper;
 import net.fabricmc.loader.api.FabricLoader;
