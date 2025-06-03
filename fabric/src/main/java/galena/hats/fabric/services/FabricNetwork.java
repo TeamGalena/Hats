@@ -21,7 +21,7 @@ public class FabricNetwork implements INetwork {
     private static final ResourceLocation ID = Constants.createId("hat_config");
 
     private static FriendlyByteBuf encode(HatConfigMessage message) {
-        var buffer = PacketByteBufs.empty();
+        var buffer = PacketByteBufs.create();
         HatConfigMessage.encode(message, buffer);
         return buffer;
     }

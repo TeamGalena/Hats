@@ -19,6 +19,8 @@ subprojects {
     }
 
     enablePublishing {
+        name = "hats-${project.name}"
+
         repositories {
             mavenLocal()
 
