@@ -1,4 +1,4 @@
-val freecam_forge_version: String by extra
+val freecam_neoforge_version: String by extra
 
 neoforge {
     enableMixins()
@@ -13,6 +13,6 @@ tasks.compileTestJava { enabled = false }
 
 dependencies {
     if (!env.isCI) {
-        modRuntimeOnly("maven.modrinth:freecam:${freecam_forge_version}")
+        modRuntimeOnly("maven.modrinth:freecam:${freecam_neoforge_version}")
     }
 }

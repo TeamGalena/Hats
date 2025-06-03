@@ -1,11 +1,10 @@
 package galena.hats;
 
+import java.util.List;
 import net.minecraft.client.model.AgeableListModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.world.entity.LivingEntity;
-
-import java.util.List;
 
 public class HatModel<T extends LivingEntity> extends AgeableListModel<T> {
 

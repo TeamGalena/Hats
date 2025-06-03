@@ -1,5 +1,7 @@
 package galena.hats;
 
+import static galena.hats.Constants.MOD_ID;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.CycleButton;
@@ -7,8 +9,6 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
-
-import static galena.hats.Constants.MOD_ID;
 
 public class HatConfigScreen extends Screen {
 

@@ -1,6 +1,7 @@
 package galena.hats;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import java.util.Optional;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
@@ -18,8 +19,6 @@ import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
-
-import java.util.Optional;
 
 public class HatLayer<T extends LivingEntity, M extends EntityModel<T>> extends RenderLayer<T, M> {
 
@@ -63,7 +62,7 @@ public class HatLayer<T extends LivingEntity, M extends EntityModel<T>> extends 
 
         poseStack.translate(0F, 0F, 0F);
 
-        var vertexConsumer = ItemRenderer.getArmorFoilBuffer(bufferSource, RenderType.entityTranslucent(texture), false, false);
+        var vertexConsumer = ItemRenderer.getArmorFoilBuffer(bufferSource, RenderType.entityTranslucent(texture), false);
         model.prepareMobModel(entity, f, g, h);
 
         if (getParentModel() instanceof HumanoidModel<?> parent) {
@@ -73,7 +72,7 @@ public class HatLayer<T extends LivingEntity, M extends EntityModel<T>> extends 
             model.setupAnim(entity, f, g, h, i, j);
         }
 
-        model.renderToBuffer(poseStack, vertexConsumer, i, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        model.renderToBuffer(poseStack, vertexConsumer, i, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
 
         poseStack.popPose();
     }

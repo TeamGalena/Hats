@@ -11,8 +11,6 @@ public class FabricClientEntrypoint implements ClientModInitializer {
     public void onInitializeClient() {
         EntityModelLayerRegistry.registerModelLayer(HatLayer.LAYER_LOCATION, HatLayer::createLayerDefinition);
 
-
-
         FabricNetwork.registerClientHandler();
     }
 

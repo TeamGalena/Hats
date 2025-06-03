@@ -4,7 +4,9 @@
   "version": "${mod_version}",
   "name": "${mod_name}",
   "description": "TODO",
-  "authors": ["${mod_author}"],
+  "authors": [
+    "${mod_author}"
+  ],
   "contact": {
     "sources": "https://github.com/${repository}",
     "issues": "https://github.com/${repository}/issues"
@@ -12,10 +14,17 @@
   "license": "https://github.com/${repository}/blob/1.20.x/LICENSE.txt",
   "environment": "*",
   "entrypoints": {
-    "main": ["galena.hats.fabric.FabricEntrypoint"],
-    "client": ["galena.hats.fabric.FabricClientEntrypoint"]
+    "main": [
+      "galena.hats.fabric.FabricEntrypoint"
+    ],
+    "client": [
+      "galena.hats.fabric.FabricClientEntrypoint"
+    ]
   },
-  "mixins": ["${mod_id}.fabric.mixins.json", "${mod_id}.mixins.json"],
+  "mixins": [
+    "${mod_id}.fabric.mixins.json",
+    "${mod_id}.mixins.json"
+  ],
   "depends": {
     "fabricloader": ">=0.16",
     "fabric-api": "*",
