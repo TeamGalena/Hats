@@ -36,8 +36,8 @@ jobs:
       - name: Build and upload
         uses: gradle/gradle-build-action@v2
         with:
-          arguments: build curseforge modrinth
+          arguments: build publish
         env:
-          CURSEFORGE_TOKEN: ${{ secrets.CURSEFORGE_TOKEN }}
-          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+          NEXUS_USER: ${{ secrets.NEXUS_USER }}
+          NEXUS_TOKEN: ${{ secrets.NEXUS_TOKEN }}
           CHANGELOG: ${{ github.event.release.body }}
