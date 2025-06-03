@@ -2,7 +2,6 @@ package galena.hats;
 
 import galena.hats.services.INetwork;
 import galena.hats.services.IPlatformHelper;
-
 import java.util.ServiceLoader;
 
 public class Services {

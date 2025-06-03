@@ -1,13 +1,12 @@
 package galena.hats;
 
 import com.mojang.serialization.Codec;
+import java.util.Locale;
+import java.util.Optional;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-
-import java.util.Locale;
-import java.util.Optional;
 
 public enum HatType implements StringRepresentable {
 

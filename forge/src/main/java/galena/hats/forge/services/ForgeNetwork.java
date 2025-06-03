@@ -4,13 +4,12 @@ import galena.hats.ConfigStorage;
 import galena.hats.Constants;
 import galena.hats.HatConfigMessage;
 import galena.hats.services.INetwork;
+import java.util.function.Supplier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.network.simple.SimpleChannel;
-
-import java.util.function.Supplier;
 
 public class ForgeNetwork implements INetwork {
 

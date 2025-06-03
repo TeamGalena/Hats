@@ -1,12 +1,10 @@
 package galena.hats;
 
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.level.ServerPlayer;
-import org.jetbrains.annotations.Nullable;
-
 import java.util.Optional;
 import java.util.UUID;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
+import org.jetbrains.annotations.Nullable;
 
 public record HatConfigMessage(@Nullable UUID player, ConfigStorage.Data data) {
 
