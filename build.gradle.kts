@@ -1,5 +1,12 @@
+val mod_version: String by extra
+val mc_version: String by extra
+
 plugins {
-    id("com.possible-triangle.gradle") version ("0.2.10")
+    id("com.possible-triangle.gradle") version ("0.2.12")
+}
+
+mod {
+    version = "$mc_version-$mod_version"
 }
 
 subprojects {
@@ -22,19 +29,7 @@ subprojects {
         name = "hats-${project.name}"
 
         repositories {
-            mavenLocal()
-
-            val nexusToken = env["NEXUS_TOKEN"]
-            val nexusUser = env["NEXUS_USER"]
-            if (nexusToken != null && nexusUser != null) {
-                maven {
-                    url = uri("https://registry.somethingcatchy.net/repository/maven-releases/")
-                    credentials {
-                        username = nexusUser
-                        password = nexusToken
-                    }
-                }
-            }
+            if (env.isCI) nexus()
         }
     }
 }
