@@ -10,15 +10,19 @@ import net.minecraft.network.chat.CommonComponents;
 import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+
 public class HatConfigScreen extends Screen {
 
     public static final String TRANSLATION_KEY = MOD_ID + ".screen";
 
     private final @Nullable Screen from;
+    private final Collection<HatType> values;
 
-    public HatConfigScreen(@Nullable Screen from) {
+    public HatConfigScreen(@Nullable Screen from, Collection<HatType> values) {
         super(Component.translatable(TRANSLATION_KEY + ".title"));
         this.from = from;
+        this.values = values;
     }
 
     @Override
@@ -33,7 +37,7 @@ public class HatConfigScreen extends Screen {
         );
 
         addRenderableWidget(CycleButton.<HatType>builder(type -> Component.translatable(MOD_ID + ".hat_type." + type.getSerializedName()))
-                .withValues(HatType.values())
+                .withValues(values)
                 .withInitialValue(config.type())
                 .create(centerX - 100, startY + 24, 200, 20, Component.translatable(TRANSLATION_KEY + ".button.type"), (button, value) -> ConfigStorage.setHatType(value))
         );

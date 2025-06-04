@@ -20,12 +20,4 @@ public record HatConfigMessage(@Nullable UUID player, ConfigStorage.Data data) {
         return new HatConfigMessage(player, data);
     }
 
-    public void distribute(ServerPlayer sender) {
-        var packet = new HatConfigMessage(sender.getUUID(), data());
-        sender.server.getPlayerList().getPlayers()
-                .stream()
-                .filter(it -> !it.getUUID().equals(player))
-                .forEach(it -> Services.NETWORK.broadcastConfig(packet, it));
-    }
-
 }

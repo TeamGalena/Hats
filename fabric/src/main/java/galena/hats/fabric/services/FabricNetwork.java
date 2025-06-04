@@ -3,6 +3,7 @@ package galena.hats.fabric.services;
 import galena.hats.ConfigStorage;
 import galena.hats.Constants;
 import galena.hats.HatConfigMessage;
+import galena.hats.ServerConfigStorage;
 import galena.hats.services.INetwork;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
@@ -34,14 +35,16 @@ public class FabricNetwork implements INetwork {
     public static void registerClientHandler() {
         ClientPlayNetworking.registerGlobalReceiver(ID, (minecraft, listener, buffer, sender) -> {
             var packet = HatConfigMessage.decode(buffer);
-            ConfigStorage.receive(packet);
+            ConfigStorage.receive(packet.player(), packet.data());
         });
     }
 
     public static void registerServerHandler() {
         ServerPlayNetworking.registerGlobalReceiver(ID, (server, player, listener, buffer, sender) -> {
             var packet = HatConfigMessage.decode(buffer);
-            packet.distribute(player);
+            server.execute(() -> {
+                ServerConfigStorage.receive(player, packet);
+            });
         });
     }
 

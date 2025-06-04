@@ -1,7 +1,8 @@
 package galena.hats.mixins;
 
 import galena.hats.HatConfigScreen;
-import net.minecraft.client.Minecraft;
+import galena.hats.HatType;
+import galena.hats.HatsApi;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.OptionsSubScreen;
@@ -30,9 +31,11 @@ public class SkinCustomizationScreenMixin extends OptionsSubScreen {
             )
     )
     public int init(int i) {
-        var minecraft = Minecraft.getInstance();
+        var allowed = HatType.allowed(minecraft.player.getUUID()).toList();
+        if (allowed.isEmpty()) return i;
+
         ++i;
-        var button = Button.builder(Component.translatable(HatConfigScreen.TRANSLATION_KEY), $ -> minecraft.setScreen(new HatConfigScreen(this)))
+        var button = Button.builder(Component.translatable(HatConfigScreen.TRANSLATION_KEY), $ -> minecraft.setScreen(new HatConfigScreen(this, allowed)))
                 .bounds(width / 2 - 155 + i % 2 * 160, height / 6 + 24 * (i >> 1), 150, 20)
                 .build();
         addRenderableWidget(button);

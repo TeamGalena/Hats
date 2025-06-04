@@ -1,8 +1,10 @@
 package galena.hats.fabric;
 
+import galena.hats.ConfigStorage;
 import galena.hats.HatLayer;
 import galena.hats.fabric.services.FabricNetwork;
 import net.fabricmc.api.ClientModInitializer;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 
 public class FabricClientEntrypoint implements ClientModInitializer {
@@ -11,9 +13,11 @@ public class FabricClientEntrypoint implements ClientModInitializer {
     public void onInitializeClient() {
         EntityModelLayerRegistry.registerModelLayer(HatLayer.LAYER_LOCATION, HatLayer::createLayerDefinition);
 
-
-
         FabricNetwork.registerClientHandler();
+
+        ClientPlayConnectionEvents.JOIN.register((listener, sender, minecraft) -> {
+            ConfigStorage.broadcastConfig();
+        });
     }
 
 }

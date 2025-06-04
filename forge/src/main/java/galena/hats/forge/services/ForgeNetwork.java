@@ -3,6 +3,7 @@ package galena.hats.forge.services;
 import galena.hats.ConfigStorage;
 import galena.hats.Constants;
 import galena.hats.HatConfigMessage;
+import galena.hats.ServerConfigStorage;
 import galena.hats.services.INetwork;
 import java.util.function.Supplier;
 import net.minecraft.server.level.ServerPlayer;
@@ -29,11 +30,13 @@ public class ForgeNetwork implements INetwork {
     private static void handleMessage(HatConfigMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
         var context = contextSupplier.get();
 
-        if (context.getDirection().getReceptionSide().isClient()) {
-            ConfigStorage.receive(message);
-        } else {
-            message.distribute(context.getSender());
-        }
+        context.enqueueWork(() -> {
+            if (context.getDirection().getReceptionSide().isClient()) {
+                ConfigStorage.receive(message.player(), message.data());
+            } else {
+                ServerConfigStorage.receive(context.getSender(), message);
+            }
+        });
 
         context.setPacketHandled(true);
     }

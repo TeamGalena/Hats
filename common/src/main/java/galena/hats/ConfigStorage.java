@@ -6,6 +6,7 @@ import com.google.gson.JsonObject;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -16,6 +17,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.function.UnaryOperator;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.FriendlyByteBuf;
@@ -24,7 +26,7 @@ import net.minecraft.world.entity.player.Player;
 public class ConfigStorage {
 
     public record Data(HatType type, boolean enabled) {
-        private static Data DEFAULT = new Data(HatType.BINOME, true);
+        private static Data DEFAULT = new Data(HatType.BINOME, false);
 
         public static final Codec<Data> CODEC = RecordCodecBuilder.create(builder ->
                 builder.group(
@@ -52,7 +54,8 @@ public class ConfigStorage {
             .create();
 
     private static Data local = load();
-    private static Map<UUID, Data> others = new HashMap<>();
+    private static boolean validated = false;
+    private static final Map<UUID, Data> others = new HashMap<>();
 
     private static Path getPath() throws IOException {
         var minecraft = Minecraft.getInstance();
@@ -88,14 +91,20 @@ public class ConfigStorage {
         }
     }
 
+    public static void broadcastConfig() {
+        Services.NETWORK.broadcastConfig(new HatConfigMessage(null, local));
+    }
+
     private static void modify(UnaryOperator<Data> modifier) {
         local = modifier.apply(local);
-        Services.NETWORK.broadcastConfig(new HatConfigMessage(null, local));
+        broadcastConfig();
         save();
     }
 
-    public static void receive(HatConfigMessage message) {
-        others.put(message.player(), message.data());
+    public static void receive(UUID other, Data data) {
+        synchronized (others) {
+            others.put(other, data);
+        }
     }
 
     public static void setHatType(HatType value) {
@@ -107,7 +116,22 @@ public class ConfigStorage {
     }
 
     public static Data getLocalConfig() {
+        if (!validated) validate();
         return local;
+    }
+
+    private static void validate() {
+        var player = Minecraft.getInstance().player;
+        if (player != null) {
+            var uuid = player.getUUID();
+            var allowed = HatType.allowed(uuid).toList();
+            if (allowed.isEmpty()) {
+                setEnabled(false);
+            } else if (!allowed.contains(local.type())) {
+                setHatType(allowed.get(0));
+            }
+            validated = HatsApi.isLoaded(uuid);
+        }
     }
 
     public static Optional<Data> getConfig(Player player) {

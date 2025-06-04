@@ -53,8 +53,6 @@ public class HatLayer<T extends LivingEntity, M extends EntityModel<T>> extends 
 
     @Override
     public void render(PoseStack poseStack, MultiBufferSource bufferSource, int i, T entity, float f, float g, float h, float j, float k, float l) {
-        if (!HatsApi.isSupporter(entity.getUUID()) && !Services.PLATFORM.isDev()) return;
-
         var texture = getTexture(entity).orElse(null);
         if (texture == null) return;
 

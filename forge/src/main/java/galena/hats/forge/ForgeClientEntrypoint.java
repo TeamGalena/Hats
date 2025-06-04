@@ -1,5 +1,6 @@
 package galena.hats.forge;
 
+import galena.hats.ConfigStorage;
 import galena.hats.Constants;
 import galena.hats.HatLayer;
 import net.minecraft.client.Minecraft;
@@ -12,6 +13,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 
@@ -42,6 +45,16 @@ public class ForgeClientEntrypoint {
     @SubscribeEvent
     public static void registerLayersDefinitions(EntityRenderersEvent.RegisterLayerDefinitions event) {
         event.registerLayerDefinition(HatLayer.LAYER_LOCATION, HatLayer::createLayerDefinition);
+    }
+
+    @EventBusSubscriber(modid = Constants.MOD_ID, value = Dist.CLIENT)
+    public static class ForgeEvents {
+
+        @SubscribeEvent
+        public static void broadcastConfig(PlayerEvent.PlayerLoggedInEvent event) {
+            ConfigStorage.broadcastConfig();
+        }
+
     }
 
 }
