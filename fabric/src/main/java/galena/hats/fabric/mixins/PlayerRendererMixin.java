@@ -1,6 +1,6 @@
 package galena.hats.fabric.mixins;
 
-import galena.hats.HatLayer;
+import galena.hats.client.HatLayer;
 import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;

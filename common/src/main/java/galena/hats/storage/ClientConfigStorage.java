@@ -1,10 +1,17 @@
-package galena.hats;
+package galena.hats.storage;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
+import galena.hats.ConfigData;
+import galena.hats.Constants;
+import galena.hats.HatType;
+import galena.hats.HatsApi;
+import galena.hats.network.ServerboundConfigMessage;
 import galena.hats.services.CommonServices;
+import net.minecraft.client.Minecraft;
+
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -14,7 +21,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.UnaryOperator;
-import net.minecraft.client.Minecraft;
 
 public class ClientConfigStorage {
 
@@ -68,7 +74,7 @@ public class ClientConfigStorage {
 
     private static void broadcastConfigUnchecked() {
         Constants.LOGGER.debug("Broadcasting local config to all other players");
-        CommonServices.NETWORK.broadcastConfig(new HatConfigMessage(null, local));
+        CommonServices.NETWORK.broadcastConfig(new ServerboundConfigMessage(local));
     }
 
     public static void broadcastConfig() {

@@ -1,4 +1,4 @@
-package galena.hats;
+package galena.hats.client;
 
 import java.util.List;
 import net.minecraft.client.model.AgeableListModel;

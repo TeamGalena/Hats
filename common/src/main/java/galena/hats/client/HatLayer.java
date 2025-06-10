@@ -1,6 +1,8 @@
-package galena.hats;
+package galena.hats.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
+import galena.hats.Constants;
+import galena.hats.HatType;
 import java.util.Optional;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.HumanoidModel;

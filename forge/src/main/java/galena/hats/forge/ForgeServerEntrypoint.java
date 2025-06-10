@@ -2,7 +2,7 @@ package galena.hats.forge;
 
 import galena.hats.Constants;
 import galena.hats.HatsCommand;
-import galena.hats.ServerConfigStorage;
+import galena.hats.storage.ServerConfigStorage;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.RegisterCommandsEvent;

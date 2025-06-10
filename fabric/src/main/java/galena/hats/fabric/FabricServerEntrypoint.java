@@ -1,7 +1,7 @@
 package galena.hats.fabric;
 
 import galena.hats.HatsCommand;
-import galena.hats.ServerConfigStorage;
+import galena.hats.storage.ServerConfigStorage;
 import net.fabricmc.api.DedicatedServerModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;

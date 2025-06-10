@@ -1,6 +1,7 @@
 package galena.hats.services;
 
-import galena.hats.HatConfigMessage;
+import galena.hats.network.ClientboundConfigMessage;
+import galena.hats.network.ServerboundConfigMessage;
 import net.minecraft.server.level.ServerPlayer;
 
 public interface INetwork {
@@ -8,11 +9,11 @@ public interface INetwork {
     /**
      * client to server
      */
-    void broadcastConfig(HatConfigMessage message);
+    void broadcastConfig(ServerboundConfigMessage message);
 
     /**
      * server to client
      */
-    void broadcastConfig(HatConfigMessage message, ServerPlayer player);
+    void broadcastConfig(ClientboundConfigMessage message, ServerPlayer player);
 
 }

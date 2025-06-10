@@ -1,10 +1,12 @@
 package galena.hats.fabric.services;
 
-import galena.hats.ConfigStorage;
 import galena.hats.Constants;
-import galena.hats.HatConfigMessage;
-import galena.hats.ServerConfigStorage;
+import galena.hats.network.ClientboundConfigMessage;
+import galena.hats.network.ServerboundConfigMessage;
 import galena.hats.services.INetwork;
+import galena.hats.storage.ConfigStorage;
+import galena.hats.storage.ServerConfigStorage;
+import java.util.function.BiConsumer;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -14,34 +16,35 @@ import net.minecraft.server.level.ServerPlayer;
 
 public class FabricNetwork implements INetwork {
 
-    private static final ResourceLocation ID = Constants.createId("hat_config");
+    private static final ResourceLocation CLIENTBOUND = Constants.createId("clientbound");
+    private static final ResourceLocation SERVERBOUND = Constants.createId("serverbound");
 
-    private static FriendlyByteBuf encode(HatConfigMessage message) {
+    private static <T> FriendlyByteBuf encode(T message, BiConsumer<T, FriendlyByteBuf> encoder) {
         var buffer = PacketByteBufs.create();
-        HatConfigMessage.encode(message, buffer);
+        encoder.accept(message, buffer);
         return buffer;
     }
 
     @Override
-    public void broadcastConfig(HatConfigMessage message) {
-        ClientPlayNetworking.send(ID, encode(message));
+    public void broadcastConfig(ServerboundConfigMessage message) {
+        ClientPlayNetworking.send(SERVERBOUND, encode(message, ServerboundConfigMessage::encode));
     }
 
     @Override
-    public void broadcastConfig(HatConfigMessage message, ServerPlayer player) {
-        ServerPlayNetworking.send(player, ID, encode(message));
+    public void broadcastConfig(ClientboundConfigMessage message, ServerPlayer player) {
+        ServerPlayNetworking.send(player, CLIENTBOUND, encode(message, ClientboundConfigMessage::encode));
     }
 
     public static void registerClientHandler() {
-        ClientPlayNetworking.registerGlobalReceiver(ID, (minecraft, listener, buffer, sender) -> {
-            var packet = HatConfigMessage.decode(buffer);
-            ConfigStorage.receive(packet.player(), packet.data());
+        ClientPlayNetworking.registerGlobalReceiver(CLIENTBOUND, (minecraft, listener, buffer, sender) -> {
+            var packet = ClientboundConfigMessage.decode(buffer);
+            packet.values().forEach(ConfigStorage::receive);
         });
     }
 
     public static void registerServerHandler() {
-        ServerPlayNetworking.registerGlobalReceiver(ID, (server, player, listener, buffer, sender) -> {
-            var packet = HatConfigMessage.decode(buffer);
+        ServerPlayNetworking.registerGlobalReceiver(SERVERBOUND, (server, player, listener, buffer, sender) -> {
+            var packet = ServerboundConfigMessage.decode(buffer);
             server.execute(() -> {
                 ServerConfigStorage.receive(player, packet);
             });

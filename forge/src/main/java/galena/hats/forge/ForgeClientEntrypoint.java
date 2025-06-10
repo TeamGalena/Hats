@@ -1,9 +1,9 @@
 package galena.hats.forge;
 
-import galena.hats.ClientConfigStorage;
 import galena.hats.Constants;
-import galena.hats.HatLayer;
 import galena.hats.HatsCommand;
+import galena.hats.client.HatLayer;
+import galena.hats.storage.ClientConfigStorage;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.PlayerModel;

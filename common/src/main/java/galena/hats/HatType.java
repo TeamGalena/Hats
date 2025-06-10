@@ -1,6 +1,7 @@
 package galena.hats;
 
 import com.mojang.serialization.Codec;
+import galena.hats.storage.ConfigStorage;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;

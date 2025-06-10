@@ -2,6 +2,7 @@ package galena.hats;
 
 import static galena.hats.Constants.MOD_ID;
 
+import galena.hats.storage.ClientConfigStorage;
 import java.util.Collection;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.components.Button;

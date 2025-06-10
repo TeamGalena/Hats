@@ -1,10 +1,11 @@
-package galena.hats;
+package galena.hats.storage;
 
+import galena.hats.ConfigData;
+import galena.hats.Constants;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Stream;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.world.entity.player.Player;
 
@@ -27,8 +28,8 @@ public class ConfigStorage {
         }
     }
 
-    public static Stream<Map.Entry<UUID, ConfigData>> getConfigs() {
-        return others.entrySet().stream();
+    static Map<UUID, ConfigData> getConfigs() {
+        return others;
     }
 
     static void clear() {

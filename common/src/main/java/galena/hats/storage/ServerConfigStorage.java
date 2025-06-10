@@ -1,6 +1,14 @@
-package galena.hats;
+package galena.hats.storage;
 
+import galena.hats.ConfigData;
+import galena.hats.Constants;
+import galena.hats.HatNotAllowedException;
+import galena.hats.HatType;
+import galena.hats.HatsApi;
+import galena.hats.network.ClientboundConfigMessage;
+import galena.hats.network.ServerboundConfigMessage;
 import galena.hats.services.CommonServices;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import net.minecraft.server.level.ServerPlayer;
 
@@ -8,7 +16,7 @@ public class ServerConfigStorage {
 
     private static final ConfigData EMPTY_DATA = ConfigData.DEFAULT;
 
-    public static void receive(ServerPlayer sender, HatConfigMessage message) {
+    public static void receive(ServerPlayer sender, ServerboundConfigMessage message) {
         Constants.LOGGER.debug("Received HatConfigMessage from {}", sender.getUUID());
         validated(sender, message).thenAccept(data -> {
             ConfigStorage.receive(sender.getUUID(), data);
@@ -16,7 +24,7 @@ public class ServerConfigStorage {
         });
     }
 
-    private static CompletableFuture<ConfigData> validated(ServerPlayer sender, HatConfigMessage message) {
+    private static CompletableFuture<ConfigData> validated(ServerPlayer sender, ServerboundConfigMessage message) {
         var data = message.data();
 
         if (!data.enabled()) {
@@ -41,15 +49,13 @@ public class ServerConfigStorage {
 
     public static void notifyCached(ServerPlayer player) {
         Constants.LOGGER.debug("Notifying {} about configs of already joined players", player.getUUID());
-        ConfigStorage.getConfigs()
-                .filter(it -> !it.getKey().equals(player.getUUID()))
-                .map(it -> new HatConfigMessage(it.getKey(), it.getValue()))
-                .forEach(packet -> CommonServices.NETWORK.broadcastConfig(packet, player));
+        var packet = new ClientboundConfigMessage(ConfigStorage.getConfigs());
+        CommonServices.NETWORK.broadcastConfig(packet, player);
     }
 
     private static void distribute(ServerPlayer sender, ConfigData data) {
         Constants.LOGGER.debug("Distributing config of {}", sender.getUUID());
-        var packet = new HatConfigMessage(sender.getUUID(), data);
+        var packet = new ClientboundConfigMessage(Map.of(sender.getUUID(), data));
         sender.server.getPlayerList().getPlayers()
                 .stream()
                 .filter(it -> !it.equals(sender))

@@ -4,6 +4,7 @@ import com.mojang.brigadier.Command;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.builder.LiteralArgumentBuilder;
 import galena.hats.services.CoreServices;
+import galena.hats.storage.ServerConfigStorage;
 import net.minecraft.commands.CommandSourceStack;
 
 public class HatsCommand {

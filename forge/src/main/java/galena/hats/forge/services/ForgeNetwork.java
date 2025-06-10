@@ -1,10 +1,11 @@
 package galena.hats.forge.services;
 
-import galena.hats.ConfigStorage;
 import galena.hats.Constants;
-import galena.hats.HatConfigMessage;
-import galena.hats.ServerConfigStorage;
+import galena.hats.network.ClientboundConfigMessage;
+import galena.hats.network.ServerboundConfigMessage;
 import galena.hats.services.INetwork;
+import galena.hats.storage.ConfigStorage;
+import galena.hats.storage.ServerConfigStorage;
 import java.util.function.Supplier;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkEvent;
@@ -24,30 +25,37 @@ public class ForgeNetwork implements INetwork {
     );
 
     public static void register() {
-        channel.registerMessage(0, HatConfigMessage.class, HatConfigMessage::encode, HatConfigMessage::decode, ForgeNetwork::handleMessage);
+        channel.registerMessage(0, ServerboundConfigMessage.class, ServerboundConfigMessage::encode, ServerboundConfigMessage::decode, ForgeNetwork::handleMessage);
+        channel.registerMessage(1, ClientboundConfigMessage.class, ClientboundConfigMessage::encode, ClientboundConfigMessage::decode, ForgeNetwork::handleMessage);
     }
 
-    private static void handleMessage(HatConfigMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
+    private static void handleMessage(ServerboundConfigMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
         var context = contextSupplier.get();
 
         context.enqueueWork(() -> {
-            if (context.getDirection().getReceptionSide().isClient()) {
-                ConfigStorage.receive(message.player(), message.data());
-            } else {
-                ServerConfigStorage.receive(context.getSender(), message);
-            }
+            ServerConfigStorage.receive(context.getSender(), message);
+        });
+
+        context.setPacketHandled(true);
+    }
+
+    private static void handleMessage(ClientboundConfigMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
+        var context = contextSupplier.get();
+
+        context.enqueueWork(() -> {
+            message.values().forEach(ConfigStorage::receive);
         });
 
         context.setPacketHandled(true);
     }
 
     @Override
-    public void broadcastConfig(HatConfigMessage message) {
+    public void broadcastConfig(ServerboundConfigMessage message) {
         channel.send(PacketDistributor.SERVER.noArg(), message);
     }
 
     @Override
-    public void broadcastConfig(HatConfigMessage message, ServerPlayer player) {
+    public void broadcastConfig(ClientboundConfigMessage message, ServerPlayer player) {
         channel.send(PacketDistributor.PLAYER.with(() -> player), message);
     }
 

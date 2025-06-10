@@ -1,9 +1,9 @@
 package galena.hats.fabric;
 
-import galena.hats.ClientConfigStorage;
-import galena.hats.HatLayer;
 import galena.hats.HatsCommand;
+import galena.hats.client.HatLayer;
 import galena.hats.fabric.services.FabricNetwork;
+import galena.hats.storage.ClientConfigStorage;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
