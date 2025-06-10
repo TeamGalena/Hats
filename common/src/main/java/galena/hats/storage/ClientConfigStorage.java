@@ -10,8 +10,6 @@ import galena.hats.HatType;
 import galena.hats.HatsApi;
 import galena.hats.network.ServerboundConfigMessage;
 import galena.hats.services.CommonServices;
-import net.minecraft.client.Minecraft;
-
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -21,6 +19,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.UnaryOperator;
+import net.minecraft.client.Minecraft;
 
 public class ClientConfigStorage {
 
