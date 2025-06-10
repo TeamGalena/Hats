@@ -16,9 +16,22 @@ public class HatsApi {
         }
     }
 
-    public static CompletableFuture<Optional<SupporterData>> getAsyncSupporterData(UUID uuid) {
+    static void clear() {
+        synchronized (data) {
+            data.clear();
+        }
+    }
+
+    private static CompletableFuture<Optional<SupporterData>> getAsyncOptionalSupporterData(UUID uuid) {
         if (isLoaded(uuid)) return CompletableFuture.completedFuture(getLoadedData(uuid));
         return load(uuid);
+    }
+
+    public static CompletableFuture<SupporterData> getAsyncSupporterData(UUID uuid) {
+        return getAsyncOptionalSupporterData(uuid).thenApply(optional -> {
+           if(optional.isEmpty()) throw new HatNotAllowedException();
+           return optional.get();
+        });
     }
 
     public static Optional<SupporterData> getSupporterData(UUID uuid) {

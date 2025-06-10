@@ -2,11 +2,9 @@ package galena.hats;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-
-import java.math.BigInteger;
+import galena.hats.services.CoreServices;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.http.HttpClient;
@@ -16,9 +14,12 @@ import java.time.Duration;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import java.util.stream.Stream;
 
 public class ApiClient {
+
+    private static final String BASE_URL = CoreServices.PLATFORM.isDev()
+            ? "http://localhost:8080/api/"
+            : "https://api.galena.wiki/api/";
 
     private static final Duration TIMEOUT = Duration.ofSeconds(5);
 
@@ -33,7 +34,7 @@ public class ApiClient {
     public static CompletableFuture<Optional<SupporterData>> fetchSupporterData(UUID uuid) {
         URI uri;
         try {
-            uri = new URI("https://api.galena.wiki/api/" + uuid.toString());
+            uri = new URI(BASE_URL + uuid.toString());
         } catch (URISyntaxException ex) {
             return CompletableFuture.failedFuture(ex);
         }

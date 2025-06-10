@@ -55,3 +55,12 @@ fabric {
     includesMod("dev.galena:hats-forge:${galena_hats_version}")
 }
 ```
+
+### Develop
+
+In a dev environment, every API call go against `http://localhost:8080/api/` instead. 
+This `stub` subproject contains a fake API listening at that address, which can be used to test and verify the mods functionality.
+It can be run using the included IDEA run config *"Stub API"*. There are two additional endpoints using the `DELETE` and `PUT` methods, 
+which can be used to modify the fake data returned by the API for specific player UUIDs.
+
+There is also an exported [Postman](https://www.postman.com/) collection under `stub/postman.json`, which has example requests for the Stub API.

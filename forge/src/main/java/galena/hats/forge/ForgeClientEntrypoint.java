@@ -1,8 +1,9 @@
 package galena.hats.forge;
 
-import galena.hats.ConfigStorage;
+import galena.hats.ClientConfigStorage;
 import galena.hats.Constants;
 import galena.hats.HatLayer;
+import galena.hats.HatsCommand;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.PlayerModel;
@@ -12,9 +13,9 @@ import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.ClientPlayerNetworkEvent;
 import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.event.entity.EntityJoinLevelEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.client.event.RegisterClientCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
 
@@ -47,12 +48,17 @@ public class ForgeClientEntrypoint {
         event.registerLayerDefinition(HatLayer.LAYER_LOCATION, HatLayer::createLayerDefinition);
     }
 
+    @SubscribeEvent
+    public static void registerCommand(RegisterClientCommandsEvent event) {
+        HatsCommand.registerClient(event.getDispatcher());
+    }
+
     @EventBusSubscriber(modid = Constants.MOD_ID, value = Dist.CLIENT)
     public static class ForgeEvents {
 
         @SubscribeEvent
-        public static void broadcastConfig(PlayerEvent.PlayerLoggedInEvent event) {
-            ConfigStorage.broadcastConfig();
+        public static void broadcastConfig(ClientPlayerNetworkEvent.LoggingIn event) {
+            ClientConfigStorage.broadcastConfig();
         }
 
     }

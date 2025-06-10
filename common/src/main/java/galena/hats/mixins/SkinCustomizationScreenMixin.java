@@ -2,7 +2,6 @@ package galena.hats.mixins;
 
 import galena.hats.HatConfigScreen;
 import galena.hats.HatType;
-import galena.hats.HatsApi;
 import net.minecraft.client.Options;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.screens.OptionsSubScreen;
@@ -31,7 +30,7 @@ public class SkinCustomizationScreenMixin extends OptionsSubScreen {
             )
     )
     public int init(int i) {
-        var allowed = HatType.allowed(minecraft.player.getUUID()).toList();
+        var allowed = HatType.allowed(minecraft.player.getUUID());
         if (allowed.isEmpty()) return i;
 
         ++i;

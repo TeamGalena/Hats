@@ -19,6 +19,9 @@
     ],
     "client": [
       "galena.hats.fabric.FabricClientEntrypoint"
+    ],
+    "server": [
+      "galena.hats.fabric.FabricServerEntrypoint"
     ]
   },
   "mixins": [

@@ -1,21 +1,17 @@
 package galena.hats;
 
 import com.mojang.serialization.Codec;
-
 import java.util.Arrays;
-import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Stream;
-
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
-
-import javax.swing.text.html.Option;
 
 public enum HatType implements StringRepresentable {
 
@@ -38,8 +34,8 @@ public enum HatType implements StringRepresentable {
         if (entity instanceof Player player) {
             var config = ConfigStorage.getConfig(player);
             return config
-                    .filter(ConfigStorage.Data::enabled)
-                    .map(ConfigStorage.Data::type);
+                    .filter(ConfigData::enabled)
+                    .map(ConfigData::type);
         }
 
         return Optional.empty();
@@ -53,17 +49,18 @@ public enum HatType implements StringRepresentable {
         };
     }
 
-    public static Stream<HatType> allowed(UUID uuid) {
+    public static List<HatType> allowed(UUID uuid) {
         return HatsApi.getSupporterData(uuid)
                 .map(HatType::allowed)
-                .orElseGet(Stream::empty);
+                .orElseGet(Collections::emptyList);
     }
 
-    public static Stream<HatType> allowed(SupporterData data) {
-        if (data.rank() > 0) return Arrays.stream(values());
+    public static List<HatType> allowed(SupporterData data) {
+        if (data.rank() > 0) return Arrays.asList(values());
         return data.flags()
                 .stream()
-                .flatMap(HatType::ofFlag);
+                .flatMap(HatType::ofFlag)
+                .toList();
     }
 
     public static final Codec<HatType> CODEC = StringRepresentable.fromEnum(HatType::values);
