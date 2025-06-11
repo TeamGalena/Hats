@@ -10,22 +10,17 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(modid = Constants.MOD_ID, value = Dist.DEDICATED_SERVER, bus = Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = Constants.MOD_ID, value = Dist.DEDICATED_SERVER)
 public class ForgeServerEntrypoint {
+
+    @SubscribeEvent
+    public static void notifyCached(PlayerEvent.PlayerLoggedInEvent event) {
+        ServerConfigStorage.notifyCached((ServerPlayer) event.getEntity());
+    }
 
     @SubscribeEvent
     public static void registerCommand(RegisterCommandsEvent event) {
         HatsCommand.registerServer(event.getDispatcher());
-    }
-
-    @Mod.EventBusSubscriber(modid = Constants.MOD_ID, value = Dist.DEDICATED_SERVER)
-    public static class ForgeEvents {
-
-        @SubscribeEvent
-        public static void notifyCached(PlayerEvent.PlayerLoggedInEvent event) {
-            ServerConfigStorage.notifyCached((ServerPlayer) event.getEntity());
-        }
-
     }
 
 }

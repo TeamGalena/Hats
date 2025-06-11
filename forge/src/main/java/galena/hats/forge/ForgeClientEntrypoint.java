@@ -48,17 +48,17 @@ public class ForgeClientEntrypoint {
         event.registerLayerDefinition(HatLayer.LAYER_LOCATION, HatLayer::createLayerDefinition);
     }
 
-    @SubscribeEvent
-    public static void registerCommand(RegisterClientCommandsEvent event) {
-        HatsCommand.registerClient(event.getDispatcher());
-    }
-
     @EventBusSubscriber(modid = Constants.MOD_ID, value = Dist.CLIENT)
     public static class ForgeEvents {
 
         @SubscribeEvent
         public static void broadcastConfig(ClientPlayerNetworkEvent.LoggingIn event) {
             ClientConfigStorage.broadcastConfig();
+        }
+
+        @SubscribeEvent
+        public static void registerCommand(RegisterClientCommandsEvent event) {
+            HatsCommand.registerClient(event.getDispatcher());
         }
 
     }
