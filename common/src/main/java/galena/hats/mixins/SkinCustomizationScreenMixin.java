@@ -30,6 +30,8 @@ public class SkinCustomizationScreenMixin extends OptionsSubScreen {
             )
     )
     public int init(int i) {
+        if(minecraft == null ||minecraft.player == null) return i;
+
         var allowed = HatType.allowed(minecraft.player.getUUID());
         if (allowed.isEmpty()) return i;
 
