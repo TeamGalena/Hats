@@ -17,6 +17,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.UnaryOperator;
 import net.minecraft.client.Minecraft;
@@ -67,7 +69,9 @@ public class ClientConfigStorage {
 
     private static void setLocalConfig(ConfigData data) {
         local = data;
-        broadcastConfigUnchecked();
+        if (Minecraft.getInstance().getConnection() != null) {
+            broadcastConfigUnchecked();
+        }
         save();
     }
 
@@ -92,15 +96,20 @@ public class ClientConfigStorage {
         modify(it -> new ConfigData(it.type(), value));
     }
 
+    public static Optional<UUID> getUUID() {
+        var minecraft = Minecraft.getInstance();
+        var user = minecraft.getUser();
+        return Optional.ofNullable(user.getProfileId());
+    }
+
     public static ConfigData getLocalConfig() {
         return local;
     }
 
     private static CompletableFuture<ConfigData> validate() {
-        var player = Minecraft.getInstance().player;
-        if (player != null) {
+        var uuid = getUUID().orElse(null);
+        if (uuid != null) {
             Constants.LOGGER.debug("Validating local config");
-            var uuid = player.getUUID();
             return HatsApi.getAsyncSupporterData(uuid)
                     .thenApply(HatType::allowed)
                     .exceptionally($ -> Collections.emptyList())
