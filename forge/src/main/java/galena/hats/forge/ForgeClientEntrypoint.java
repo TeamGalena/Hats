@@ -1,6 +1,7 @@
 package galena.hats.forge;
 
 import galena.hats.Constants;
+import galena.hats.HatsApi;
 import galena.hats.HatsCommand;
 import galena.hats.client.HatLayer;
 import galena.hats.storage.ClientConfigStorage;
@@ -18,12 +19,18 @@ import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterClientCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod.EventBusSubscriber;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 @EventBusSubscriber(modid = Constants.MOD_ID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
 public class ForgeClientEntrypoint {
 
     private static <T extends LivingEntity, M extends EntityModel<T>> void addLayerTo(LivingEntityRenderer<T, M> renderer, ModelPart layer) {
         renderer.addLayer(new HatLayer<>(renderer, layer));
+    }
+
+    @SubscribeEvent
+    public static void setup(FMLClientSetupEvent event) {
+        ClientConfigStorage.getUUID().ifPresent(HatsApi::getSupporterData);
     }
 
     @SubscribeEvent

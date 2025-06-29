@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Stub API" type="Application" factoryName="Application">
     <option name="MAIN_CLASS_NAME" value="ApiStubKt" />
-    <module name="GalenaHats.stub.main" />
+    <module name="Hats.stub.main" />
     <extension name="net.ashald.envfile">
       <option name="IS_ENABLED" value="false" />
       <option name="IS_SUBST" value="false" />

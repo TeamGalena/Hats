@@ -1,5 +1,6 @@
 package galena.hats.fabric;
 
+import galena.hats.HatsApi;
 import galena.hats.HatsCommand;
 import galena.hats.client.HatLayer;
 import galena.hats.fabric.services.FabricNetwork;
@@ -24,6 +25,8 @@ public class FabricClientEntrypoint implements ClientModInitializer {
         ClientCommandRegistrationCallback.EVENT.register((dispatcher, context) -> {
             HatsCommand.registerClient(dispatcher);
         });
+
+        ClientConfigStorage.getUUID().ifPresent(HatsApi::getSupporterData);
     }
 
 }

@@ -1,4 +1,5 @@
-import galena.hats.SupporterData
+package galena.hats
+
 import io.ktor.http.HttpStatusCode
 import io.ktor.serialization.gson.gson
 import io.ktor.server.application.*
@@ -13,6 +14,7 @@ import io.ktor.server.routing.put
 import io.ktor.server.routing.route
 import io.ktor.server.routing.routing
 
+var DEFAULT: SupporterData? = null
 val CACHE = hashMapOf<String, SupporterData>()
 
 fun main() {
@@ -30,11 +32,22 @@ fun Application.module() {
             get("/{uuid}") {
                 val uuid = call.pathParameters["uuid"]!!
                 log.info("Data requested for UUID $uuid")
-                CACHE[uuid]?.let {
+                val data = CACHE[uuid] ?: DEFAULT
+                data?.let {
                     call.respond(it)
                 } ?: run {
                     call.respond(HttpStatusCode.NotFound)
                 }
+            }
+
+            put("/default") {
+                val data = call.receive<SupporterData>()
+
+                log.info("Overwriting default data")
+
+                DEFAULT = data
+
+                call.respond(data)
             }
 
             put("/{uuid}") {

@@ -5,6 +5,7 @@ import static galena.hats.Constants.MOD_ID;
 import galena.hats.storage.ClientConfigStorage;
 import java.util.Collection;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.CycleButton;
 import net.minecraft.client.gui.screens.Screen;
@@ -47,6 +48,13 @@ public class HatConfigScreen extends Screen {
                         .bounds(centerX - 100, startY + 78, 200, 20)
                         .build()
         );
+    }
+
+    @Override
+    public void render(GuiGraphics graphics, int width, int height, float partialTicks) {
+        renderBackground(graphics);
+        graphics.drawCenteredString(this.font, this.title, this.width / 2, 15, 16777215);
+        super.render(graphics, width, height, partialTicks);
     }
 
     @Override
