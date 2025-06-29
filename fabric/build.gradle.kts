@@ -1,5 +1,8 @@
 import net.fabricmc.loom.api.LoomGradleExtensionAPI
 
+val freecam_fabric_version: String by extra
+val cloth_config_fabric_version: String by extra
+
 fabric {
     enableMixins()
 
@@ -21,5 +24,12 @@ configure<LoomGradleExtensionAPI> {
                 runDir("run/$i")
             }
         }
+    }
+}
+
+dependencies {
+    if (!env.isCI) {
+        modRuntimeOnly("maven.modrinth:freecam:${freecam_fabric_version}")
+        modRuntimeOnly("maven.modrinth:9s6osm5g:${cloth_config_fabric_version}")
     }
 }

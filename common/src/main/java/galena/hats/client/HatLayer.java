@@ -34,17 +34,35 @@ public class HatLayer<T extends LivingEntity, M extends EntityModel<T>> extends 
     }
 
     public static LayerDefinition createLayerDefinition() {
-        var cubeDeformation = CubeDeformation.NONE;
+        var deformation = CubeDeformation.NONE;
         var meshDefinition = new MeshDefinition();
         var partDefinition = meshDefinition.getRoot();
 
+        var arrow = partDefinition.addOrReplaceChild("arrow", CubeListBuilder.create()
+                        .texOffs(0, 0)
+                        .addBox(-7.0F, -5.0F, -1.0F, 18.0F, 5.0F, 0.0F, deformation),
+                PartPose.offset(-2.0F, -10.0F, 1.0F));
+
+        arrow.addOrReplaceChild("cube_r1", CubeListBuilder.create()
+                        .texOffs(0, 0)
+                        .addBox(-7.0F, -5.0F, -1.5F, 17.0F, 5.0F, 0.0F, deformation),
+                PartPose.offsetAndRotation(0.0F, -1.0F, -3.5F, -1.5708F, 0.0F, 0.0F)
+        );
+
         partDefinition.addOrReplaceChild("main", CubeListBuilder.create()
                         .texOffs(0, 36)
-                        .addBox(-5.0F, -10.0F, -5.0F, 10.0F, 2.0F, 10.0F, cubeDeformation)
+                        .addBox(-5.0F, -10.0F, -5.0F, 10.0F, 2.0F, 10.0F, deformation)
                         .texOffs(16, 22)
-                        .addBox(-4.0F, -16.0F, -4.0F, 8.0F, 6.0F, 8.0F, cubeDeformation),
+                        .addBox(-4.0F, -16.0F, -4.0F, 8.0F, 6.0F, 8.0F, deformation),
                 PartPose.offset(0.0F, 0.0F, 0.0F)
         );
+
+        var plant = partDefinition.addOrReplaceChild("plant", CubeListBuilder.create().texOffs(-8, 21).addBox(-7.0F, 0.0F, -1.0F, 8.0F, 0.0F, 8.0F, deformation), PartPose.offset(3.0F, -14.9F, -3.0F));
+        plant.addOrReplaceChild("cube_r1", CubeListBuilder.create().texOffs(-16, 5).addBox(-16.0F, 0.0F, -1.0F, 17.0F, 0.0F, 16.0F, deformation), PartPose.offsetAndRotation(8.0F, -11.0F, 11.0F, 0.0F, -1.5708F, -0.7854F));
+        plant.addOrReplaceChild("cube_r2", CubeListBuilder.create().texOffs(-16, 5).addBox(-16.0F, 0.0F, -1.0F, 17.0F, 0.0F, 16.0F, deformation), PartPose.offsetAndRotation(-14.0F, -11.0F, -5.0F, 0.0F, 1.5708F, 0.7854F));
+        plant.addOrReplaceChild("cube_r3", CubeListBuilder.create().texOffs(-16, 5).addBox(-16.0F, 0.0F, -1.0F, 17.0F, 0.0F, 16.0F, deformation), PartPose.offsetAndRotation(-19.0F, -1.0F, -5.0F, 0.0F, 1.5708F, 0.0F));
+        plant.addOrReplaceChild("cube_r4", CubeListBuilder.create().texOffs(-16, 5).addBox(-16.0F, 0.0F, -1.0F, 17.0F, 0.0F, 16.0F, deformation), PartPose.offsetAndRotation(13.0F, -1.0F, 11.0F, 0.0F, -1.5708F, 0.0F));
+
 
         return LayerDefinition.create(meshDefinition, 48, 48);
     }

@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Stream;
+import java.util.function.Predicate;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.LivingEntity;
@@ -16,20 +16,42 @@ import net.minecraft.world.entity.player.Player;
 
 public enum HatType implements StringRepresentable {
 
-    BINOME,
-    BIOME_VOTE,
-    COPPERATIVE,
-    DOOM_GLOOM,
-    FERMION,
-    GILDED,
-    HEART_CRYSTAL,
-    NIRVANA,
-    OVERWEIGHT_FARMING,
-    TRANS,
-    TRINKETS,
-    WINDSWEPT,
-    ZOMBIE_FRIENDS,
+    BINOME(),
+    BIOME_VOTE(),
+    COPPERATIVE(),
+    DOOM_GLOOM(),
+    FERMION(),
+    GILDED(hasFlag("gilded")),
+    HEART_CRYSTAL(),
+    NIRVANA(),
+    OVERWEIGHT_FARMING(),
+    TRANS(pride()),
+    PRIDE(pride()),
+    ARROW_PRIDE(pride()),
+    BI(pride()),
+    TRINKETS(),
+    WINDSWEPT(),
+    ZOMBIE_FRIENDS(),
+    ARROW(),
+    MEHVAHDJUKAAR(hasFlag("mehvahdjukaar")),
+    TUCCUT(hasFlag("tuccut")),
     ;
+
+    private static Predicate<SupporterData> pride() {
+        return hasFlag("pride").or(isSupporter());
+    }
+
+    private static Predicate<SupporterData> aboveRank(int min) {
+        return it -> it.rank() > min;
+    }
+
+    private static Predicate<SupporterData> isSupporter() {
+        return aboveRank(0);
+    }
+
+    private static Predicate<SupporterData> hasFlag(String flag) {
+        return it -> it.flags().contains(flag);
+    }
 
     public static Optional<HatType> of(LivingEntity entity) {
         if (entity instanceof Player player) {
@@ -43,13 +65,6 @@ public enum HatType implements StringRepresentable {
 
     }
 
-    private static Stream<HatType> ofFlag(String flag) {
-        return switch (flag) {
-            case "pride" -> Stream.of(TRANS);
-            default -> Stream.empty();
-        };
-    }
-
     public static List<HatType> allowed(UUID uuid) {
         return HatsApi.getSupporterData(uuid)
                 .map(HatType::allowed)
@@ -57,19 +72,23 @@ public enum HatType implements StringRepresentable {
     }
 
     public static List<HatType> allowed(SupporterData data) {
-        if (data.rank() > 0) return Arrays.asList(values());
-        return data.flags()
-                .stream()
-                .flatMap(HatType::ofFlag)
+        return Arrays.stream(HatType.values())
+                .filter(it -> it.predicate.test(data))
                 .toList();
     }
 
     public static final Codec<HatType> CODEC = StringRepresentable.fromEnum(HatType::values);
 
     public final ResourceLocation texture;
+    private final Predicate<SupporterData> predicate;
+
+    HatType(Predicate<SupporterData> predicate) {
+        this.predicate = predicate;
+        this.texture = Constants.createId("textures/models/" + getSerializedName() + "_tophat.png");
+    }
 
     HatType() {
-        this.texture = Constants.createId("textures/models/" + getSerializedName() + "_tophat.png");
+        this(isSupporter());
     }
 
     @Override
