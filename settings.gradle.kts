@@ -8,4 +8,4 @@ pluginManagement {
     }
 }
 
-include("core", "common", "fabric", "forge", "stub")
+include("core", "common", "fabric", "neoforge", "stub")

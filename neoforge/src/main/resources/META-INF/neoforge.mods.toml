@@ -1,6 +1,6 @@
 modLoader = "javafml"
-loaderVersion = "[47,)"
-license = 'https://github.com/${repository}/blob/1.20.x/LICENSE.txt'
+loaderVersion = "[1,)"
+license = 'https://github.com/${repository}/blob/1.21.x/LICENSE.txt'
 issueTrackerURL = "https://github.com/${repository}/issues"
 
 [[mods]]
@@ -11,15 +11,16 @@ authors = "${mod_author}"
 description = '''cosmetic hats for supporters of team galena'''
 
 [[dependencies.${mod_id}]]
-    modId = "forge"
-    mandatory = true
-    versionRange = "[47,)"
+    modId = "neoforge"
+    versionRange = "[21,)"
     ordering = "NONE"
     side = "BOTH"
 
 [[dependencies.${mod_id}]]
     modId = "minecraft"
-    mandatory = true
     versionRange = "[1.20.1,)"
     ordering = "NONE"
     side = "BOTH"
+
+[[mixins]]
+    config="${mod_id}.mixins.json"

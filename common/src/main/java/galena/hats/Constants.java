@@ -11,7 +11,7 @@ public class Constants {
     public static final Logger LOGGER = LogManager.getLogger("Galena Hats");
 
     public static ResourceLocation createId(String path) {
-        return new ResourceLocation(MOD_ID, path);
+        return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
     }
 
 }

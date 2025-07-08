@@ -1,17 +1,17 @@
-package galena.hats.forge;
+package galena.hats.neoforge;
 
 import galena.hats.Constants;
 import galena.hats.HatsCommand;
 import galena.hats.storage.ServerConfigStorage;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.event.RegisterCommandsEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.RegisterCommandsEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 
-@Mod.EventBusSubscriber(modid = Constants.MOD_ID, value = Dist.DEDICATED_SERVER)
-public class ForgeServerEntrypoint {
+@EventBusSubscriber(modid = Constants.MOD_ID, value = Dist.DEDICATED_SERVER)
+public class NeoforgeServerEntrypoint {
 
     @SubscribeEvent
     public static void notifyCached(PlayerEvent.PlayerLoggedInEvent event) {

@@ -80,7 +80,7 @@ public class HatLayer<T extends LivingEntity, M extends EntityModel<T>> extends 
 
         poseStack.translate(0F, 0F, 0F);
 
-        var vertexConsumer = ItemRenderer.getArmorFoilBuffer(bufferSource, RenderType.entityTranslucent(texture), false, false);
+        var vertexConsumer = ItemRenderer.getArmorFoilBuffer(bufferSource, RenderType.entityTranslucent(texture), false);
         model.prepareMobModel(entity, f, g, h);
 
         if (getParentModel() instanceof HumanoidModel<?> parent) {
@@ -90,7 +90,7 @@ public class HatLayer<T extends LivingEntity, M extends EntityModel<T>> extends 
             model.setupAnim(entity, f, g, h, i, j);
         }
 
-        model.renderToBuffer(poseStack, vertexConsumer, i, OverlayTexture.NO_OVERLAY, 1.0F, 1.0F, 1.0F, 1.0F);
+        model.renderToBuffer(poseStack, vertexConsumer, i, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
 
         poseStack.popPose();
     }

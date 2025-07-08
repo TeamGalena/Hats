@@ -52,7 +52,7 @@ public class HatConfigScreen extends Screen {
 
     @Override
     public void render(GuiGraphics graphics, int width, int height, float partialTicks) {
-        renderBackground(graphics);
+        renderBackground(graphics, width, height, partialTicks);
         graphics.drawCenteredString(this.font, this.title, this.width / 2, 15, 16777215);
         super.render(graphics, width, height, partialTicks);
     }
