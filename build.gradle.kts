@@ -1,5 +1,5 @@
 plugins {
-    id("com.possible-triangle.gradle") version ("0.2.13")
+    id("com.possible-triangle.gradle") version ("0.2.17")
 }
 
 subprojects {
@@ -14,16 +14,9 @@ subprojects {
         }
     }
 
-    tasks.withType<Jar> {
-        exclude("**/*.bbmodel")
-    }
-
     enablePublishing {
         name = "hats-${project.name}"
-
-        repositories {
-            if (env.isCI) nexus()
-        }
+        nexus()
     }
 }
 
