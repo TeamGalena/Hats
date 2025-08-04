@@ -35,6 +35,7 @@ public enum HatType implements StringRepresentable {
     ARROW(),
     MEHVAHDJUKAAR(hasFlag("mehvahdjukaar")),
     TUCCUT(hasFlag("tuccut")),
+    YOUTUBE(hasFlag("youtube")),
     ;
 
     private static Predicate<SupporterData> pride() {

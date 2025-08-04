@@ -10,7 +10,7 @@ It is included in our mods and does not have to be installed separately
 ```kotlin
 repositories {
     maven {
-        url = uri("https://registry.somethingcatchy.net/repository/maven-releases/")
+        url = uri("https://registry.somethingcatchy.net/repository/maven-public/")
         content {
             includeGroup("dev.galena")
         }
@@ -32,6 +32,19 @@ dependencies {
             prefer(galena_hats_version)
         }
     }))
+}
+````
+
+### NeoForge
+
+````kotlin
+dependencies {
+    implementation(jarJar("dev.galena:hats-neoforge:${galena_hats_version}") {
+        version {
+            strictly("[${galena_hats_version},)")
+            prefer(galena_hats_version)
+        }
+    })
 }
 ````
 
