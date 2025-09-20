@@ -1,6 +1,7 @@
 package galena.hats.fabric;
 
 import galena.hats.HatsCommand;
+import galena.hats.fabric.services.FabricNetwork;
 import galena.hats.storage.ServerConfigStorage;
 import net.fabricmc.api.DedicatedServerModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
@@ -17,6 +18,9 @@ public class FabricServerEntrypoint implements DedicatedServerModInitializer {
         ServerPlayConnectionEvents.JOIN.register((listener, sender, server) -> {
             ServerConfigStorage.notifyCached(listener.getPlayer());
         });
+
+        FabricNetwork.registerCodecs();
+        FabricNetwork.registerServerHandler();
     }
 
 }

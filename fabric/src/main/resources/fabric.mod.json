@@ -14,9 +14,6 @@
   "license": "https://github.com/${repository}/blob/1.20.x/LICENSE.txt",
   "environment": "*",
   "entrypoints": {
-    "main": [
-      "galena.hats.fabric.FabricEntrypoint"
-    ],
     "client": [
       "galena.hats.fabric.FabricClientEntrypoint"
     ],
