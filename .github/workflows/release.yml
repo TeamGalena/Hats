@@ -31,6 +31,7 @@ jobs:
         with:
           arguments: build publish
         env:
+          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
           NEXUS_USER: ${{ secrets.NEXUS_USER }}
           NEXUS_TOKEN: ${{ secrets.NEXUS_TOKEN }}
           CHANGELOG: ${{ github.event.release.body }}

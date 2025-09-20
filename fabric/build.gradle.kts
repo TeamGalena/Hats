@@ -33,3 +33,5 @@ dependencies {
         modRuntimeOnly("maven.modrinth:9s6osm5g:${cloth_config_fabric_version}")
     }
 }
+
+uploadToModrinth()

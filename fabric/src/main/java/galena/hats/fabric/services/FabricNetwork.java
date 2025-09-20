@@ -22,17 +22,20 @@ public class FabricNetwork implements INetwork {
         ServerPlayNetworking.send(player, message);
     }
 
-    public static void registerClientHandler() {
+    private static void registerHandlers() {
         PayloadTypeRegistry.playS2C().register(ClientboundConfigMessage.TYPE.type(), ClientboundConfigMessage.TYPE.codec());
+        PayloadTypeRegistry.playC2S().register(ServerboundConfigMessage.TYPE.type(), ServerboundConfigMessage.TYPE.codec());
+    }
 
+    public static void registerClientHandler() {
+        registerHandlers();
         ClientPlayNetworking.registerGlobalReceiver(ClientboundConfigMessage.TYPE.type(), (message, context) -> {
             message.values().forEach(ConfigStorage::receive);
         });
     }
 
     public static void registerServerHandler() {
-        PayloadTypeRegistry.playC2S().register(ServerboundConfigMessage.TYPE.type(), ServerboundConfigMessage.TYPE.codec());
-
+        registerHandlers();
         ServerPlayNetworking.registerGlobalReceiver(ServerboundConfigMessage.TYPE.type(), (message, context) -> {
             context.server().execute(() -> {
                 ServerConfigStorage.receive(context.player(), message);

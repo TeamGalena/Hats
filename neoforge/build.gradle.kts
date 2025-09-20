@@ -12,3 +12,5 @@ dependencies {
         modRuntimeOnly("maven.modrinth:freecam:${freecam_neoforge_version}")
     }
 }
+
+uploadToModrinth()
