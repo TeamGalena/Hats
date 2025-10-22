@@ -1,16 +1,16 @@
-import net.fabricmc.loom.api.LoomGradleExtensionAPI
+plugins {
+    id("com.possible-triangle.fabric")
+}
 
 val freecam_fabric_version: String by extra
 val cloth_config_fabric_version: String by extra
 
 fabric {
-    enableMixins()
-
     dependOn(project(":core"))
     dependOn(project(":common"))
 }
 
-configure<LoomGradleExtensionAPI> {
+loom {
     log4jConfigs.from(file("log4j.xml"))
 
     runs {
@@ -33,5 +33,3 @@ dependencies {
         modRuntimeOnly("maven.modrinth:9s6osm5g:${cloth_config_fabric_version}")
     }
 }
-
-uploadToModrinth()

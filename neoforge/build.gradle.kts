@@ -1,8 +1,10 @@
 val freecam_neoforge_version: String by extra
 
-neoforge {
-    enableMixins()
+plugins {
+    id("com.possible-triangle.neoforge")
+}
 
+neoforge {
     dependOn(project(":core"))
     dependOn(project(":common"))
 }
@@ -12,5 +14,3 @@ dependencies {
         modRuntimeOnly("maven.modrinth:freecam:${freecam_neoforge_version}")
     }
 }
-
-uploadToModrinth()
