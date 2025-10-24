@@ -1,15 +1,15 @@
 val freecam_forge_version: String by extra
 
+plugins {
+    id("com.possible-triangle.forge")
+}
+
 forge {
     enableMixins()
 
     dependOn(project(":core"))
     dependOn(project(":common"))
 }
-
-// issues with mixin extras
-tasks.withType<Test> { enabled = false }
-tasks.compileTestJava { enabled = false }
 
 dependencies {
     if (!env.isCI) {
