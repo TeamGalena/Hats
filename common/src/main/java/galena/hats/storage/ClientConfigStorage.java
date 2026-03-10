@@ -3,6 +3,7 @@ package galena.hats.storage;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 import com.mojang.serialization.JsonOps;
 import galena.hats.ConfigData;
 import galena.hats.Constants;
@@ -10,6 +11,7 @@ import galena.hats.HatType;
 import galena.hats.HatsApi;
 import galena.hats.network.ServerboundConfigMessage;
 import galena.hats.services.CommonServices;
+
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -21,6 +23,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.UnaryOperator;
+
 import net.minecraft.client.Minecraft;
 
 public class ClientConfigStorage {
@@ -45,7 +48,7 @@ public class ClientConfigStorage {
             return ConfigData.CODEC.parse(JsonOps.INSTANCE, json)
                     .result()
                     .orElseThrow(() -> new IllegalStateException("could not decode config data"));
-        } catch (IOException | IllegalStateException ex) {
+        } catch (IOException | IllegalStateException | JsonSyntaxException ex) {
             Constants.LOGGER.error("Failed to load config");
             Constants.LOGGER.trace(ex);
             return ConfigData.DEFAULT;
@@ -62,7 +65,7 @@ public class ClientConfigStorage {
                     .orElseThrow(() -> new IllegalStateException("could not encode config data"));
 
             Files.write(path, bytes);
-        } catch (IOException | IllegalStateException ex) {
+        } catch (IOException | IllegalStateException | JsonSyntaxException ex) {
             Constants.LOGGER.error("Failed to save config", ex);
         }
     }
