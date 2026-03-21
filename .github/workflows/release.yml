@@ -1,7 +1,8 @@
 # <meta>
 #    <source>@pssbletrngle/github-meta-generator</source>
-#    <version>0.0.0-dev</version>
-#    <timestamp>2026-03-11T13:15:27.335Z</timestamp>
+#    <version>1.0.21</version>
+#    <timestamp>2026-03-21T08:35:08.957Z</timestamp>
+#    <hash>6b903fbf8a732c1a</hash>
 # </meta>
 
 name: Release
@@ -30,11 +31,11 @@ jobs:
           distribution: temurin
 
       - uses: gradle/actions/setup-gradle@v4
+        with:
+          cache-read-only: ${{ github.event_name != 'push' }}
 
       - name: Build and upload
-        uses: gradle/gradle-build-action@v2
-        with:
-          arguments: build publish
+        run: ./gradlew build publish
         env:
           MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
           CHANGELOG: ${{ github.event.release.body }}
