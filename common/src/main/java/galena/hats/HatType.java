@@ -2,12 +2,7 @@ package galena.hats;
 
 import com.mojang.serialization.Codec;
 import galena.hats.storage.ConfigStorage;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 import java.util.function.Predicate;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.StringRepresentable;
@@ -27,15 +22,22 @@ public enum HatType implements StringRepresentable {
     OVERWEIGHT_FARMING(),
     TRANS(pride()),
     PRIDE(pride()),
-    ARROW_PRIDE(pride()),
+    ARROW_PRIDE(pride(), Set.of(HatPart.ARROW)),
     BI(pride()),
+    ACE(pride()),
+    GAY_MALE(pride()),
+    LESBIAN(pride()),
+    NONBINARY(pride()),
+    PAN(pride()),
     TRINKETS(),
     WINDSWEPT(),
     ZOMBIE_FRIENDS(),
-    ARROW(),
+    ARROW(Set.of(HatPart.ARROW)),
     MEHVAHDJUKAAR(hasFlag("mehvahdjukaar")),
-    TUCCUT(hasFlag("tuccut")),
+    TUCCUT(hasFlag("tuccut"), Set.of(HatPart.PLANT)),
     YOUTUBE(hasFlag("youtube")),
+    METALLICA(Set.of(HatPart.RIM)),
+    UNPLEASANT_GRADIENT(Set.of(HatPart.EARS)),
     ;
 
     private static Predicate<SupporterData> pride() {
@@ -50,6 +52,10 @@ public enum HatType implements StringRepresentable {
         return aboveRank(0);
     }
 
+    private static Predicate<SupporterData> isDeveloper() {
+        return aboveRank(99);
+    }
+
     private static Predicate<SupporterData> hasFlag(String flag) {
         return it -> it.flags().contains(flag);
     }
@@ -58,8 +64,8 @@ public enum HatType implements StringRepresentable {
         if (entity instanceof Player player) {
             var config = ConfigStorage.getConfig(player);
             return config
-                    .filter(ConfigData::enabled)
-                    .map(ConfigData::type);
+                .filter(ConfigData::enabled)
+                .map(ConfigData::type);
         }
 
         return Optional.empty();
@@ -68,28 +74,38 @@ public enum HatType implements StringRepresentable {
 
     public static List<HatType> allowed(UUID uuid) {
         return HatsApi.getSupporterData(uuid)
-                .map(HatType::allowed)
-                .orElseGet(Collections::emptyList);
+            .map(HatType::allowed)
+            .orElseGet(Collections::emptyList);
     }
 
     public static List<HatType> allowed(SupporterData data) {
         return Arrays.stream(HatType.values())
-                .filter(it -> it.predicate.test(data))
-                .toList();
+            .filter(it -> it.predicate.test(data))
+            .toList();
     }
 
     public static final Codec<HatType> CODEC = StringRepresentable.fromEnum(HatType::values);
 
     public final ResourceLocation texture;
     private final Predicate<SupporterData> predicate;
+    public final Collection<HatPart> parts;
 
-    HatType(Predicate<SupporterData> predicate) {
+    HatType(Predicate<SupporterData> predicate, Collection<HatPart> parts) {
         this.predicate = predicate;
         this.texture = Constants.createId("textures/models/" + getSerializedName() + "_tophat.png");
+        this.parts = parts;
+    }
+
+    HatType(Predicate<SupporterData> predicate) {
+        this(predicate, Collections.emptySet());
+    }
+
+    HatType(Collection<HatPart> parts) {
+        this(isSupporter(), parts);
     }
 
     HatType() {
-        this(isSupporter());
+        this(isSupporter(), Collections.emptySet());
     }
 
     @Override
