@@ -1,5 +1,7 @@
 package galena.hats.client;
 
+import galena.hats.HatPart;
+import java.util.Collection;
 import java.util.List;
 import net.minecraft.client.model.AgeableListModel;
 import net.minecraft.client.model.HumanoidModel;
@@ -34,4 +36,10 @@ public class HatModel<T extends LivingEntity> extends AgeableListModel<T> {
         root.copyFrom(contextModel.head);
     }
 
+    public void setupVisibleParts(Collection<HatPart> parts) {
+        for (var part : HatPart.values()) {
+            var modelPart = root.getChild(part.getSerializedName());
+            modelPart.visible = parts.contains(part);
+        }
+    }
 }
