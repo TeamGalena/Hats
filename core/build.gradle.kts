@@ -1,5 +1,8 @@
-val gson_version: String by extra
+plugins {
+    // TODO add plugin without minecraft dependencies
+    id("com.possible-triangle.common")
+}
 
 dependencies {
-    compileOnly("com.google.code.gson:gson:${gson_version}")
+    compileOnly(libs.gson)
 }
