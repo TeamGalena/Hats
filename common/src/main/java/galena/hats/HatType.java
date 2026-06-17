@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import galena.hats.storage.ConfigStorage;
 import java.util.*;
 import java.util.function.Predicate;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
@@ -86,7 +86,7 @@ public enum HatType implements StringRepresentable {
 
     public static final Codec<HatType> CODEC = StringRepresentable.fromEnum(HatType::values);
 
-    public final ResourceLocation texture;
+    public final Identifier texture;
     private final Predicate<SupporterData> predicate;
     public final Collection<HatPart> parts;
 

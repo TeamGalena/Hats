@@ -23,8 +23,8 @@ public class FabricNetwork implements INetwork {
     }
 
     public static void registerCodecs() {
-        PayloadTypeRegistry.playS2C().register(ClientboundConfigMessage.TYPE.type(), ClientboundConfigMessage.TYPE.codec());
-        PayloadTypeRegistry.playC2S().register(ServerboundConfigMessage.TYPE.type(), ServerboundConfigMessage.TYPE.codec());
+        PayloadTypeRegistry.clientboundPlay().register(ClientboundConfigMessage.TYPE.type(), ClientboundConfigMessage.TYPE.codec());
+        PayloadTypeRegistry.serverboundPlay().register(ServerboundConfigMessage.TYPE.type(), ServerboundConfigMessage.TYPE.codec());
     }
 
     public static void registerClientHandler() {

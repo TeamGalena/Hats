@@ -18,7 +18,7 @@ description = '''cosmetic hats for supporters of team galena'''
 
 [[dependencies.${mod_id}]]
     modId = "minecraft"
-    versionRange = "[1.20.1,)"
+    versionRange = "[26.1.2,)"
     ordering = "NONE"
     side = "BOTH"
 

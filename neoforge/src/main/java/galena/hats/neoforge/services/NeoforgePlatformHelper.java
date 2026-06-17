@@ -7,7 +7,7 @@ public class NeoforgePlatformHelper implements IPlatformHelper {
 
     @Override
     public boolean isDev() {
-        return !FMLLoader.isProduction();
+        return !FMLLoader.getCurrent().isProduction();
     }
 
 }

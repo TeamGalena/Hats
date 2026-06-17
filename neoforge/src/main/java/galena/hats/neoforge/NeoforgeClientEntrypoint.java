@@ -6,12 +6,11 @@ import galena.hats.HatsCommand;
 import galena.hats.client.HatLayer;
 import galena.hats.storage.ClientConfigStorage;
 import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.model.PlayerModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
+import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Player;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -20,10 +19,10 @@ import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterClientCommandsEvent;
 
-@EventBusSubscriber(modid = Constants.MOD_ID, value = Dist.CLIENT, bus = EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = Constants.MOD_ID, value = Dist.CLIENT)
 public class NeoforgeClientEntrypoint {
 
-    private static <T extends LivingEntity, M extends EntityModel<T>> void addLayerTo(LivingEntityRenderer<T, M> renderer, ModelPart layer) {
+    private static <T extends LivingEntity, S extends HumanoidRenderState, M extends EntityModel<? super S>> void addLayerTo(LivingEntityRenderer<T, S, M> renderer, ModelPart layer) {
         renderer.addLayer(new HatLayer<>(renderer, layer));
     }
 
@@ -37,13 +36,13 @@ public class NeoforgeClientEntrypoint {
         var layer = event.getEntityModels().bakeLayer(HatLayer.LAYER_LOCATION);
 
         event.getSkins().forEach(skin -> {
-            LivingEntityRenderer<Player, PlayerModel<Player>> renderer = event.getSkin(skin);
+            var renderer = event.getPlayerRenderer(skin);
             if (renderer != null) addLayerTo(renderer, layer);
         });
 
         event.getEntityTypes().forEach(type -> {
             var renderer = event.getRenderer(type);
-            if (renderer instanceof HumanoidMobRenderer<?, ?> humanoid) {
+            if (renderer instanceof HumanoidMobRenderer<?, ?, ?> humanoid) {
                 addLayerTo(humanoid, layer);
             }
         });

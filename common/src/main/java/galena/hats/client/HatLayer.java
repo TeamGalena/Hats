@@ -12,15 +12,14 @@ import net.minecraft.client.model.geom.builders.CubeDeformation;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.client.renderer.SubmitNodeCollector;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
+import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
+import net.minecraft.client.renderer.rendertype.RenderTypes;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.world.entity.LivingEntity;
 
-public class HatLayer<T extends LivingEntity, M extends EntityModel<T>> extends RenderLayer<T, M> {
+public class HatLayer<T extends HumanoidRenderState, M extends EntityModel<? super T>> extends RenderLayer<T, M> {
 
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(Constants.createId("hat"), "main");
 
@@ -83,26 +82,28 @@ public class HatLayer<T extends LivingEntity, M extends EntityModel<T>> extends 
     }
 
     @Override
-    public void render(PoseStack poseStack, MultiBufferSource bufferSource, int i, T entity, float f, float g, float h, float j, float k, float l) {
-        var type = HatType.of(entity).orElse(null);
+    public void submit(PoseStack poseStack, SubmitNodeCollector nodeCollector, int lightCoords, T state, float yRot, float xRot) {
+        // TODO 26.1.2 port
+        //var type = HatType.of(state.entity).orElse(null);
+        var type = HatType.BINOME;
         if (type == null) return;
 
         poseStack.pushPose();
 
         poseStack.translate(0F, 0F, 0F);
 
-        var vertexConsumer = ItemRenderer.getArmorFoilBuffer(bufferSource, RenderType.entityTranslucent(type.texture), false);
-        model.prepareMobModel(entity, f, g, h);
+        // model.prepareMobModel(entity, f, g, h);
 
         if (getParentModel() instanceof HumanoidModel<?> parent) {
             //noinspection unchecked
             model.copyPropertiesFrom((HumanoidModel<T>) parent);
         } else {
-            model.setupAnim(entity, f, g, h, i, j);
+            model.setupAnim(state);
         }
 
         model.setupVisibleParts(type.parts);
-        model.renderToBuffer(poseStack, vertexConsumer, i, OverlayTexture.NO_OVERLAY, 0xFFFFFFFF);
+        var renderType = RenderTypes.entityTranslucent(type.texture);
+        nodeCollector.submitModel(model, state, poseStack, renderType, lightCoords, OverlayTexture.NO_OVERLAY, state.outlineColor, null);
 
         poseStack.popPose();
     }

@@ -7,6 +7,7 @@ import galena.hats.storage.ConfigStorage;
 import galena.hats.storage.ServerConfigStorage;
 import net.minecraft.server.level.ServerPlayer;
 import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.client.network.ClientPacketDistributor;
 import net.neoforged.neoforge.network.PacketDistributor;
 import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
 import net.neoforged.neoforge.network.handling.IPayloadContext;
@@ -37,7 +38,7 @@ public class NeoforgeNetwork implements INetwork {
 
     @Override
     public void broadcastConfig(ServerboundConfigMessage message) {
-        PacketDistributor.sendToServer(message);
+        ClientPacketDistributor.sendToServer(message);
     }
 
     @Override

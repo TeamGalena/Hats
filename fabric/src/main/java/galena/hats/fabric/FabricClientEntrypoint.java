@@ -8,23 +8,29 @@ import galena.hats.storage.ClientConfigStorage;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
-import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
+import net.fabricmc.fabric.api.client.rendering.v1.LivingEntityRenderLayerRegistrationCallback;
+import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
 
 public class FabricClientEntrypoint implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        EntityModelLayerRegistry.registerModelLayer(HatLayer.LAYER_LOCATION, HatLayer::createLayerDefinition);
+        LivingEntityRenderLayerRegistrationCallback.EVENT.register((_, renderer, helper, context) -> {
+            if (renderer instanceof HumanoidMobRenderer<?, ?, ?> humanoid) {
+                var layer = context.bakeLayer(HatLayer.LAYER_LOCATION);
+                helper.register(new HatLayer<>(humanoid, layer));
+            }
+        });
 
         FabricNetwork.registerCodecs();
         FabricNetwork.registerClientHandler();
         FabricNetwork.registerServerHandler();
 
-        ClientPlayConnectionEvents.JOIN.register((listener, sender, minecraft) -> {
+        ClientPlayConnectionEvents.JOIN.register((_, _, _) -> {
             ClientConfigStorage.broadcastConfig();
         });
 
-        ClientCommandRegistrationCallback.EVENT.register((dispatcher, context) -> {
+        ClientCommandRegistrationCallback.EVENT.register((dispatcher, _) -> {
             HatsCommand.registerClient(dispatcher);
         });
 

@@ -56,7 +56,8 @@ public class ServerConfigStorage {
     private static void distribute(ServerPlayer sender, ConfigData data) {
         Constants.LOGGER.debug("Distributing config of {}", sender.getUUID());
         var packet = new ClientboundConfigMessage(Map.of(sender.getUUID(), data));
-        sender.server.getPlayerList().getPlayers()
+        var server = sender.level().getServer();
+        server.getPlayerList().getPlayers()
                 .stream()
                 .filter(it -> !it.equals(sender))
                 .forEach(it -> CommonServices.NETWORK.broadcastConfig(packet, it));

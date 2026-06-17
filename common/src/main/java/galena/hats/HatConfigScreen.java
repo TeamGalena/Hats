@@ -5,7 +5,6 @@ import static galena.hats.Constants.MOD_ID;
 import galena.hats.storage.ClientConfigStorage;
 import java.util.Collection;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.CycleButton;
 import net.minecraft.client.gui.screens.Screen;
@@ -37,9 +36,8 @@ public class HatConfigScreen extends Screen {
                 .create(centerX - 100, startY, 200, 20, Component.translatable(TRANSLATION_KEY + ".button.enable"), (button, value) -> ClientConfigStorage.setEnabled(value))
         );
 
-        addRenderableWidget(CycleButton.<HatType>builder(type -> Component.translatable(MOD_ID + ".hat_type." + type.getSerializedName()))
+        addRenderableWidget(CycleButton.<HatType>builder(type -> Component.translatable(MOD_ID + ".hat_type." + type.getSerializedName()), config::type)
                 .withValues(values)
-                .withInitialValue(config.type())
                 .create(centerX - 100, startY + 24, 200, 20, Component.translatable(TRANSLATION_KEY + ".button.type"), (button, value) -> ClientConfigStorage.setHatType(value))
         );
 
@@ -50,12 +48,13 @@ public class HatConfigScreen extends Screen {
         );
     }
 
-    @Override
-    public void render(GuiGraphics graphics, int width, int height, float partialTicks) {
-        renderBackground(graphics, width, height, partialTicks);
-        graphics.drawCenteredString(this.font, this.title, this.width / 2, 15, 16777215);
-        super.render(graphics, width, height, partialTicks);
-    }
+    // TODO 26.1.2 port
+    // @Override
+    // public void renrder(GuiGraphics graphics, int width, int height, float partialTicks) {
+    //     renderBackground(graphics, width, height, partialTicks);
+    //     graphics.drawCenteredString(this.font, this.title, this.width / 2, 15, 16777215);
+    //     super.render(graphics, width, height, partialTicks);
+    // }
 
     @Override
     public void onClose() {
