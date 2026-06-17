@@ -14,7 +14,7 @@ import io.ktor.server.routing.put
 import io.ktor.server.routing.route
 import io.ktor.server.routing.routing
 
-var DEFAULT: SupporterData? = null
+var default: SupporterData? = null
 val CACHE = hashMapOf<String, SupporterData>()
 
 fun main() {
@@ -32,7 +32,7 @@ fun Application.module() {
             get("/{uuid}") {
                 val uuid = call.pathParameters["uuid"]!!
                 log.info("Data requested for UUID $uuid")
-                val data = CACHE[uuid] ?: DEFAULT
+                val data = CACHE[uuid] ?: default
                 data?.let {
                     call.respond(it)
                 } ?: run {
@@ -45,7 +45,7 @@ fun Application.module() {
 
                 log.info("Overwriting default data")
 
-                DEFAULT = data
+                default = data
 
                 call.respond(data)
             }
