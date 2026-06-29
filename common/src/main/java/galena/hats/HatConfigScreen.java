@@ -47,14 +47,6 @@ public class HatConfigScreen extends Screen {
         );
     }
 
-    // TODO 26.1.2 port
-    // @Override
-    // public void renrder(GuiGraphics graphics, int width, int height, float partialTicks) {
-    //     renderBackground(graphics, width, height, partialTicks);
-    //     graphics.drawCenteredString(this.font, this.title, this.width / 2, 15, 16777215);
-    //     super.render(graphics, width, height, partialTicks);
-    // }
-
     @Override
     public void onClose() {
         if (from != null) {
