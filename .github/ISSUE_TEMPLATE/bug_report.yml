@@ -1,8 +1,8 @@
 # <meta>
 #    <source>@pssbletrngle/github-meta-generator</source>
-#    <version>1.0.95</version>
-#    <timestamp>2026-06-21T19:14:33.712Z</timestamp>
-#    <hash>da6408a5a8f03a8a</hash>
+#    <version>1.0.104</version>
+#    <timestamp>2026-06-29T13:07:48.749Z</timestamp>
+#    <hash>f8c6011b30f7e72d</hash>
 # </meta>
 
 name: Bug Report
@@ -45,6 +45,7 @@ body:
       label: Minecraft Version
       multiple: false
       options:
+        - "26.2"
         - "26.1"
         - "1.21"
         - "1.20"
