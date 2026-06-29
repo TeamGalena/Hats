@@ -1,15 +1,19 @@
 package galena.hats.neoforge;
 
+import com.google.common.reflect.TypeToken;
 import galena.hats.Constants;
+import galena.hats.HatType;
 import galena.hats.HatsApi;
 import galena.hats.HatsCommand;
 import galena.hats.client.HatLayer;
+import galena.hats.neoforge.services.NeoforgeRenderHelper;
 import galena.hats.storage.ClientConfigStorage;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
 import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
+import net.minecraft.client.renderer.entity.state.LivingEntityRenderState;
 import net.minecraft.world.entity.LivingEntity;
 import net.neoforged.api.distmarker.Dist;
 import net.neoforged.bus.api.SubscribeEvent;
@@ -18,6 +22,7 @@ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.client.event.RegisterClientCommandsEvent;
+import net.neoforged.neoforge.client.renderstate.RegisterRenderStateModifiersEvent;
 
 @EventBusSubscriber(modid = Constants.MOD_ID, value = Dist.CLIENT)
 public class NeoforgeClientEntrypoint {
@@ -46,6 +51,18 @@ public class NeoforgeClientEntrypoint {
                 addLayerTo(humanoid, layer);
             }
         });
+    }
+
+    @SubscribeEvent
+    public static void extendRenderState(RegisterRenderStateModifiersEvent event) {
+        event.registerEntityModifier(
+                new TypeToken<LivingEntityRenderer<LivingEntity, LivingEntityRenderState, ?>>() {
+                },
+                (entity, state) -> {
+                    var type = HatType.of(entity);
+                    state.setRenderData(NeoforgeRenderHelper.CONTEXT_KEY, type);
+                }
+        );
     }
 
     @SubscribeEvent

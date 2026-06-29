@@ -9,15 +9,24 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.rendering.v1.LivingEntityRenderLayerRegistrationCallback;
+import net.fabricmc.fabric.api.client.rendering.v1.ModelLayerRegistry;
 import net.minecraft.client.renderer.entity.HumanoidMobRenderer;
+import net.minecraft.client.renderer.entity.player.AvatarRenderer;
 
 public class FabricClientEntrypoint implements ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
+        ModelLayerRegistry.registerModelLayer(HatLayer.LAYER_LOCATION, HatLayer::createLayerDefinition);
+
         LivingEntityRenderLayerRegistrationCallback.EVENT.register((_, renderer, helper, context) -> {
+            var layer = context.bakeLayer(HatLayer.LAYER_LOCATION);
+
             if (renderer instanceof HumanoidMobRenderer<?, ?, ?> humanoid) {
-                var layer = context.bakeLayer(HatLayer.LAYER_LOCATION);
+                helper.register(new HatLayer<>(humanoid, layer));
+            }
+
+            if (renderer instanceof AvatarRenderer<?> humanoid) {
                 helper.register(new HatLayer<>(humanoid, layer));
             }
         });

@@ -3,9 +3,9 @@ package galena.hats.client;
 import galena.hats.HatPart;
 import java.util.Collection;
 import net.minecraft.client.model.EntityModel;
-import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.entity.state.HumanoidRenderState;
+import net.minecraft.util.Mth;
 
 public class HatModel<T extends HumanoidRenderState> extends EntityModel<T> {
 
@@ -13,10 +13,18 @@ public class HatModel<T extends HumanoidRenderState> extends EntityModel<T> {
         super(root);
     }
 
-    public void copyPropertiesFrom(HumanoidModel<T> contextModel) {
-        // TODO 26.1.2 port
-        // contextModel.copyPropertiesTo(this);
-        // root.copyFrom(contextModel.head);
+    @Override
+    public void setupAnim(T state) {
+        super.setupAnim(state);
+
+        // Copied from EntityModel
+        root.xRot = state.xRot * ((float) Math.PI / 180F);
+        root.yRot = state.yRot * ((float) Math.PI / 180F);
+        if (state.isFallFlying) {
+            root.xRot = (-(float) Math.PI / 4F);
+        } else if (state.swimAmount > 0.0F) {
+            root.xRot = Mth.rotLerpRad(state.swimAmount, root.xRot, (-(float) Math.PI / 4F));
+        }
     }
 
     public void setupVisibleParts(Collection<HatPart> parts) {
