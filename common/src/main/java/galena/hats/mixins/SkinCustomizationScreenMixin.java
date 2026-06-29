@@ -39,7 +39,7 @@ public abstract class SkinCustomizationScreenMixin extends OptionsSubScreen {
             if (!allowed.isEmpty()) {
                 var button = Button.builder(
                         Component.translatable(HatConfigScreen.TRANSLATION_KEY),
-                        $ -> minecraft.setScreen(new HatConfigScreen(this, allowed))
+                        $ -> minecraft.gui.setScreen(new HatConfigScreen(this, allowed))
                 ).build();
                 buttons.add(button);
             }
