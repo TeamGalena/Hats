@@ -5,15 +5,10 @@ plugins {
     id("com.possible-triangle.neoforge") apply false
 }
 
-val (_, semver) =
-    project.mod.version
-        .get()
-        .split("-")
-
-mod.version = semver
-
 subprojects {
     apply(plugin = "com.possible-triangle.core")
+
+    mod.version = mod.version.get().substringAfter('-')
 
     upload {
         maven {
