@@ -5,12 +5,19 @@ plugins {
     id("com.possible-triangle.forge") apply false
 }
 
+val (_, semver) =
+    project.mod.version
+        .get()
+        .split("-")
+
+mod.version = semver
+
 subprojects {
     apply(plugin = "com.possible-triangle.core")
 
     upload {
         maven {
-            name = "hats-${project.name}"
+            name = "hats-${mod.minecraftVersion.get()}-${project.name}"
             nexus()
         }
     }
