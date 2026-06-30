@@ -5,7 +5,7 @@ It is included in our mods and does not have to be installed separately
 
 ## How to include
 
-1. Add the repository
+![Latest Version](https://img.shields.io/maven-metadata/v?metadataUrl=https%3A%2F%2Fregistry.somethingcatchy.net%2Frepository%2Fmaven-releases%2Fdev%2Fgalena%2Fhats-1.21.1-core%2Fmaven-metadata.xml&label=latest%20version%20for%201.21.1)
 
 ```kotlin
 repositories {
@@ -18,28 +18,11 @@ repositories {
 }
 ```
 
-2. Get latest version for your preferred from the [Releases Tab](https://github.com/TeamGalena/Hats/releases).
-
-3. Add and include mod in build JAR file
-
-### Forge
-
-````kotlin
-dependencies {
-    implementation(fg.deobf(jarJar("dev.galena:hats-forge:${galena_hats_version}") {
-        version {
-            strictly("[${galena_hats_version},)")
-            prefer(galena_hats_version)
-        }
-    }))
-}
-````
-
 ### NeoForge
 
 ````kotlin
 dependencies {
-    implementation(jarJar("dev.galena:hats-neoforge:${galena_hats_version}") {
+    implementation(jarJar("dev.galena:hats-1.21.1-neoforge:${galena_hats_version}") {
         version {
             strictly("[${galena_hats_version},)")
             prefer(galena_hats_version)
@@ -52,20 +35,20 @@ dependencies {
 
 ````kotlin
 dependencies {
-    modImplementation(include("dev.galena:hats-fabric:${galena_hats_version}"))
+    modImplementation(include("dev.galena:hats-1.21.1-fabric:${galena_hats_version}"))
 }
 ````
 
-### Using `com.possible-triangle.gradle`
+### Using `com.possible-triangle.*` gradle plugins
 ```kotlin
 forge {
-    includesMod("dev.galena:hats-forge:${galena_hats_version}")
+    includesMod("dev.galena:hats-1.21.1-neoforge:${galena_hats_version}")
 }
 
 // OR
 
 fabric {
-    includesMod("dev.galena:hats-forge:${galena_hats_version}")
+    includesMod("dev.galena:hats-1.21.1-fabric:${galena_hats_version}")
 }
 ```
 
